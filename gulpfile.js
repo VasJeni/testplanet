@@ -7,21 +7,27 @@ var path = {
         js: 'assets/build/js/',
         css: 'assets/build/css/',
         img: 'assets/build/img/',
-        fonts: 'assets/build/fonts/'
+        fonts: 'assets/build/fonts/',
+        shaders : 'assets/build/shaders',
+        build : 'assets/build/build'
     },
     src: {
         html: 'assets/src/*.html',
         js: 'assets/src/js/main.js',
         style: 'assets/src/style/main.scss',
         img: 'assets/src/img/**/*.*',
-        fonts: 'assets/src/fonts/**/*.*'
+        fonts: 'assets/src/fonts/**/*.*',
+        shaders: 'assets/src/shaders/**/*.*',
+        build: 'assets/src/build/**/*.*'
     },
     watch: {
         html: 'assets/src/**/*.html',
         js: 'assets/src/js/**/*.js',
         css: 'assets/src/style/**/*.scss',
         img: 'assets/src/img/**/*.*',
-        fonts: 'assets/srs/fonts/**/*.*'
+        fonts: 'assets/srs/fonts/**/*.*',
+        shaders: 'assets/src/shaders/**/*.*',
+        build: 'assets/src/build/**/*.*'
     },
     clean: './assets/build/*'
 };
@@ -64,6 +70,18 @@ gulp.task('html:build', function () {
         .pipe(plumber()) // отслеживание ошибок
         .pipe(rigger()) // импорт вложений
         .pipe(gulp.dest(path.build.html)) // выкладывание готовых файлов
+        .pipe(webserver.reload({ stream: true })); // перезагрузка сервера
+});
+//дублирование shaders в папку build
+gulp.task('shaders:build', function(){
+    return gulp.src(path.src.shaders) //попитка получить все файлы шейдеров
+        .pipe(gulp.dest(path.build.shaders)) //попытка копирования файлов
+        .pipe(webserver.reload({ stream: true })); // перезагрузка сервера
+});
+
+gulp.task('build:build', function(){
+    return gulp.src(path.src.build) //попитка получить все файлы шейдеров
+        .pipe(gulp.dest(path.build.build)) //попытка копирования файлов
         .pipe(webserver.reload({ stream: true })); // перезагрузка сервера
 });
 
@@ -137,7 +155,9 @@ gulp.task('build',
             'css:build',
             'js:build',
             'fonts:build',
-            'image:build'
+            'image:build',
+            'shaders:build',
+            'build:build'
         )
     )
 );
@@ -149,6 +169,8 @@ gulp.task('watch', function () {
     gulp.watch(path.watch.js, gulp.series('js:build'));
     gulp.watch(path.watch.img, gulp.series('image:build'));
     gulp.watch(path.watch.fonts, gulp.series('fonts:build'));
+    gulp.watch(path.watch.shaders, gulp.series('shaders:build'))
+    gulp.watch(path.watch.build, gulp.series('build:build'))
 });
 
 // задача по умолчанию

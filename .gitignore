@@ -1,2 +1,12 @@
 # Project exclude paths
 /node_modules/
+!/assets/build/
+Буде вилучено .idea/.gitignore
+Буде вилучено .idea/CVV2.iml
+Буде вилучено .idea/misc.xml
+Буде вилучено .idea/modules.xml
+Буде вилучено .idea/vcs.xml
+Буде вилучено assets/build/
+Буде вилучено assets/src/fonts/
+Буде вилучено assets/src/img/
+Буде вилучено assets/src/template/emails/
